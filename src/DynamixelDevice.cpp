@@ -2,13 +2,9 @@
 
 
 DynamixelDevice::DynamixelDevice(OneWireMInterface &aInterface, uint8_t aID) :
-	mInterface(aInterface), mStatusReturnLevel(255), mID(aID)
+	mInterface(aInterface), mStatusReturnLevel(0), mID(aID)
 {
 	mStatus = DYN_STATUS_OK;
-	if (mID == OW_BROADCAST_ID)
-	{
-		mStatusReturnLevel = 0;
-	}
 }
 
 OneWireStatus DynamixelDevice::init()
@@ -24,12 +20,18 @@ OneWireStatus DynamixelDevice::init()
     if (ret != OW_STATUS_OK)
     {
         mStatusReturnLevel = 0;
+    }
+    if (ret == OW_STATUS_TIMEOUT)
+    {
+        return OW_STATUS_OK;
+    }
+    else
+    {
         return ret;
     }
-    return ret;
 }
 
-bool DynamixelDevice::environmentError()
+bool DynamixelDevice::environmentError() const
 {
     return (mStatus & (
         DYN_STATUS_INPUT_VOLTAGE_ERROR |
@@ -37,7 +39,7 @@ bool DynamixelDevice::environmentError()
         DYN_STATUS_OVERLOAD_ERROR)) != 0;
 }
 
-bool DynamixelDevice::commandError()
+bool DynamixelDevice::commandError() const
 {
     return (mStatus & (
         DYN_STATUS_ANGLE_LIMIT_ERROR |
@@ -46,7 +48,7 @@ bool DynamixelDevice::commandError()
         DYN_STATUS_INSTRUCTION_ERROR)) != 0;
 }
 
-bool DynamixelDevice::recoverableError()
+bool DynamixelDevice::recoverableError() const
 {
     return (mStatus & DYN_STATUS_OVERLOAD_ERROR) != 0 &&
         (mStatus & (DYN_STATUS_INPUT_VOLTAGE_ERROR | 

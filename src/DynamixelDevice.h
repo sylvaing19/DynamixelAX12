@@ -12,19 +12,19 @@ public:
 	
 	OneWireStatus init();
 	
-	DynamixelStatus status() { return mStatus; }
-    bool error() { return mStatus != DYN_STATUS_OK; }
-    bool environmentError();
-    bool commandError();
-    bool recoverableError();
+	DynamixelStatus status() const { return mStatus; }
+    bool error() const { return mStatus != DYN_STATUS_OK; }
+    bool environmentError() const;
+    bool commandError() const;
+    bool recoverableError() const;
 	
-	uint8_t id() { return mID; }
+	uint8_t id() const { return mID; }
     int setId(uint8_t newId);	
 	uint16_t model();
 	uint8_t firmware();
     int communicationSpeed(uint32_t aBaudrate);
     int statusReturnLevel(uint8_t aSRL);
-    uint8_t statusReturnLevel() { return mStatusReturnLevel; }
+    uint8_t statusReturnLevel() const { return mStatusReturnLevel; }
 	
 	template<class T>
 	inline OneWireStatus read(uint8_t aAddress, T& aData)
