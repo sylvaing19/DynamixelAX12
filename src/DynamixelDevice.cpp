@@ -71,8 +71,8 @@ int DynamixelDevice::setId(uint8_t newId)
 
 uint16_t DynamixelDevice::model()
 {
-    uint16_t result;
-    if (read(DYN_ADDRESS_ID, result) == OW_STATUS_OK)
+    uint16_t result = 0;
+    if (read(DYN_ADDRESS_MODEL, result) == OW_STATUS_OK)
     {
         return result;
     }
@@ -84,7 +84,7 @@ uint16_t DynamixelDevice::model()
 
 uint8_t DynamixelDevice::firmware()
 {
-    uint8_t result;
+    uint8_t result = 0;
     if (read(DYN_ADDRESS_FIRMWARE, result) == OW_STATUS_OK)
     {
         return result;
